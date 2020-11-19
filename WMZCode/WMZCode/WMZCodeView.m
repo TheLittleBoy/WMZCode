@@ -99,13 +99,13 @@
     })];
     
     [self addSubview:({
-        self.slider.frame = CGRectMake(margin, CGRectGetMaxY(self.mainImage.frame)+3*margin, self.width-margin*2, 10);
+        self.slider.frame = CGRectMake(margin, CGRectGetMaxY(self.mainImage.frame), self.width-margin*2, 55);
         [self.slider addTarget:self action:@selector(buttonAction:forEvent:) forControlEvents:UIControlEventAllTouchEvents];
         self.slider;
     })];
     
     [self addSubview:({
-        self.refresh.frame = CGRectMake(self.width-margin-50, CGRectGetMaxY(self.slider.frame)+margin, 40, 40);
+        self.refresh.frame = CGRectMake(self.width-margin-50, CGRectGetMaxY(self.slider.frame), 40, 40);
         [self.refresh setImage:[UIImage imageNamed:@"refresh"] forState:UIControlStateNormal];
         [self.refresh addTarget:self action:@selector(refreshAction) forControlEvents:UIControlEventTouchUpInside];
         self.refresh;
@@ -439,9 +439,19 @@ static inline UIBezierPath* getCodePath(){
 @implementation WMZSlider
 //改变滑动条高度
 - (CGRect)trackRectForBounds:(CGRect)bounds{
-    bounds.size.height=12;
-    self.layer.cornerRadius = 5;
-    return bounds;
+    CGRect result = [super trackRectForBounds:bounds];
+    result.size.height=12;
+    result.origin.y = (CGRectGetHeight(bounds)-CGRectGetHeight(result))/2;
+    return result;
+}
+
+//调整滑块坐标
+- (CGRect)thumbRectForBounds:(CGRect)bounds trackRect:(CGRect)rect value:(float)value {
+    rect.origin.x = rect.origin.x - 10 ;
+    rect.size.width = rect.size.width +20;
+    return [super thumbRectForBounds:bounds
+                           trackRect:rect
+                               value:value];
 }
 
 @end
